@@ -37,17 +37,25 @@ export default function(){
   }, [messages]);
 
   const sendMessage = () => {
-    if (inputBarText.trim().length === 0) return;
+  if (inputBarText.trim().length === 0) return;
 
-    // Correct way to update state: create a NEW array
-    let newMessages = [{ direction: 'right', text: inputBarText }];
-    const aResponse = handleInput(inputBarText);
-    for(const message of aResponse){
-      newMessages.push({direction: "left", text: message});
+  // Show user's message immediately
+  setMessages(prev => [...prev, { direction: 'right', text: inputBarText }]);
+
+  const aResponse = handleInput(inputBarText);
+
+  // Simulate AI "thinking"
+  setTimeout(() => {
+    let newMessages = [];
+    for (const message of aResponse) {
+      newMessages.push({ direction: "left", text: message });
     }
-    setMessages([...messages, ...newMessages]);
-    setInputBarText('');
-  };
+
+    setMessages(prev => [...prev, ...newMessages]);
+  }, 500);
+
+  setInputBarText('');
+};
 
   return (
     <View style={styles.outer}>
